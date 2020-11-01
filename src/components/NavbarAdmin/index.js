@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
-export default class NavbarHome extends Component {
+export default class NavbarAdmin extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-md bg-dark navbar-dark">
         {/* Brand */}
         <a className="navbar-brand" href="#">
-          Navbar
+          Admin
         </a>
         {/* Toggler/collapsibe Button */}
         <button
@@ -22,23 +22,17 @@ export default class NavbarHome extends Component {
         <div className="collapse navbar-collapse" id="collapsibleNavbar">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink exact activeClassName="active" className="nav-link" to="/">
-                Home
+              <NavLink
+                activeClassName="active"
+                className="nav-link"
+                to="/dashboard"
+              >
+                Dashboard
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink activeClassName="active" className="nav-link" to="/about">
-                About
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink activeClassName="active" className="nav-link" to="/list-movie">
-                List Movie
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink activeClassName="active" className="nav-link" to="/hoc">
-                HOC
+              <NavLink activeClassName="active" className="nav-link" to="/user">
+                User
               </NavLink>
             </li>
           </ul>

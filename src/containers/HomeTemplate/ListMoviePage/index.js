@@ -1,44 +1,27 @@
 import React, { Component } from "react";
-import Axios from "axios";
 import Movie from "../../../components/Movie";
+import { connect } from "react-redux";
+import { actListMovieApi } from "./modules/action";
+import Loader from "../../../components/Loader";
 
-export default class ListMoviePage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      listMovie: [],
-      loading: false,
-    };
-  }
+class ListMoviePage extends Component {
   componentDidMount() {
-    this.setState({
-      loading: true,
-    });
-    Axios({
-      url:
-        "https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP02",
-      method: "GET",
-    })
-      .then((result) => {
-        this.setState({
-          listMovie: result.data,
-          loading: false,
-        });
-      })
-      .catch();
+    this.props.listMovieApi();
   }
 
   renderHTML = () => {
-    const { listMovie } = this.state;
-    return listMovie.map((movie) => {
-      return <Movie key={movie.maPhim} movie={movie} />;
-    });
+    const { listMovie } = this.props;
+    if (listMovie && listMovie.length > 0) {
+      return listMovie.map((movie) => {
+        return <Movie key={movie.maPhim} movie={movie} />;
+      });
+    }
   };
 
   render() {
-    const { loading } = this.state;
+    const { loading } = this.props;
     if (loading) {
-      return <div>Loading ...</div>
+      return <Loader />;
     }
     return (
       <div>
@@ -50,3 +33,20 @@ export default class ListMoviePage extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    listMovieApi: () => {
+      dispatch(actListMovieApi());
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    listMovie: state.listMovieReducer.data,
+    loading: state.listMovieReducer.loading,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListMoviePage);

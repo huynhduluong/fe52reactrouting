@@ -4,21 +4,30 @@ import "./App.css";
 // import ListMoviePage from "./containers/HomeTemplate/ListMoviePage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PageNotFound from "./containers/PageNotFound";
-import NavbarHome from "./components/NavbarHome";
-import { routesHome } from "./routes";
+import { routesHome, routesAdmin } from "./routes";
+import HomeTemplate from "./containers/HomeTemplate";
+import AdminTemplate from "./containers/AdminTemplate";
+import AuthPage from "./containers/AdminTemplate/AuthPage";
 //BrowserRouter dùng để bao hết trang
 //Route là bộ định tuyến
 
 function App() {
-  const showLayoutHome = (routes) => {
+  const showLayout = (routes, text) => {
     if (routes && routes.length > 0) {
       return routes.map((item, index) => {
-        return (
-          <Route
+        return text === "home" ? (
+          <HomeTemplate
             key={index}
             exact={item.exact}
             path={item.path}
-            component={item.component}
+            Component={item.component}
+          />
+        ) : (
+          <AdminTemplate
+            key={index}
+            exact={item.exact}
+            path={item.path}
+            Component={item.component}
           />
         );
       });
@@ -28,7 +37,6 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <NavbarHome />
         <Switch>
           {/* Trang HomePage - localhost:3000 */}
           {/* <Route exact path="/" component={HomePage} /> */}
@@ -39,7 +47,11 @@ function App() {
           {/* Trang ListMoviePage localhost:3000/list-movie  */}
           {/* <Route path="/list-movie" component={ListMoviePage} /> */}
 
-          {showLayoutHome(routesHome)}
+          {showLayout(routesHome, "home")}
+
+          {showLayout(routesAdmin, "admin")}
+
+          <Route exact={false} path="/auth" component={AuthPage} />
 
           {/* Không tìm thấy, phải để cuối cùng  */}
           <Route path="" component={PageNotFound} />
