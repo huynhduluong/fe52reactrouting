@@ -8,6 +8,7 @@ import { routesHome, routesAdmin } from "./routes";
 import HomeTemplate from "./containers/HomeTemplate";
 import AdminTemplate from "./containers/AdminTemplate";
 import AuthPage from "./containers/AdminTemplate/AuthPage";
+import LoginPage from "./containers/HomeTemplate/LoginPage";
 //BrowserRouter dùng để bao hết trang
 //Route là bộ định tuyến
 
@@ -52,6 +53,8 @@ function App() {
           {showLayout(routesAdmin, "admin")}
 
           <Route exact={false} path="/auth" component={AuthPage} />
+
+          <Route exact={false} path="/login" component={LoginPage} />
 
           {/* Không tìm thấy, phải để cuối cùng  */}
           <Route path="" component={PageNotFound} />
