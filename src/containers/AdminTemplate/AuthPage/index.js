@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import Loader from "../../../components/Loader";
+import { actAuthApi } from "./modules/action";
+import "./style.css";
 
-export default class AuthPage extends Component {
+class AuthPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,41 +22,73 @@ export default class AuthPage extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    
+    this.props.handleLogin(this.state);
   };
 
   render() {
+    const { loading } = this.props;
+    if (loading) {
+      return <Loader />;
+    }
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 mx-auto">
-            <h3>Auth Page</h3>
-            <form onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label>Username</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="taiKhoan"
-                  onChange={this.handelOnchange}
-                />
+      <div className="admin__login">
+        <div className="login__box">
+          <h1>Login</h1>
+
+          <form onSubmit={this.handleSubmit}>
+            <div className="form-group textbox">
+              {/* <label>Username</label> */}
+              <i className="fas fa-user" />
+              <input
+                type="text"
+                className="form-control"
+                name="taiKhoan"
+                value={this.state.taiKhoan}
+                onChange={this.handelOnchange}
+              />
+            </div>
+            <div className="form-group textbox">
+              {/* <label>Password</label> */}
+              <i className="fas fa-lock" />
+              <input
+                type="password"
+                className="form-control"
+                name="matKhau"
+                value={this.state.matKhau}
+                onChange={this.handelOnchange}
+              />
+            </div>
+            {this.props.err ? (
+              <div className="alert alert-danger">
+                Tài khoản hoặc mật khẩu không đúng
               </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="matKhau"
-                  onChange={this.handelOnchange}
-                />
-              </div>
-              <button type="submit" className="btn btn-success">
-                Login
-              </button>
-            </form>
-          </div>
+            ) : (
+              <></>
+            )}
+            <button type="submit" className="btn">
+              Login
+            </button>
+          </form>
         </div>
       </div>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleLogin: (admin) => {
+      dispatch(actAuthApi(admin));
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.authReducer.loading,
+    data: state.authReducer.data,
+    err: state.authReducer.err,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthPage);
