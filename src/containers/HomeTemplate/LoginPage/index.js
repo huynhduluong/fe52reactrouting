@@ -1,25 +1,24 @@
 import React, { Component } from "react";
-import { LoginForm, LoginLayout } from "./Login";
+import { connect } from "react-redux";
+import LoginForm from "./Login";
+import SignUpForm from "./SignUp";
 import "./login.css";
-import { SignUpForm, SignUpLayout } from "./SignUp";
-import WithLogin from "./WithLogin";
 
-const LayoutFormLogin = WithLogin(LoginForm, LoginLayout, "");
-const LayoutFormSignUp = WithLogin(SignUpForm, SignUpLayout, "sign-up-mode");
-
-export default class LoginPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      appear: true,
-    };
-  }
+class LoginPage extends Component {
   render() {
+    const { loginFormStatus } = this.props;
     return (
-      <div>
-        {/* <LayoutFormLogin /> */}
-        <LayoutFormSignUp />
+      <div className={`loginPage__container ${loginFormStatus ? "" : "sign-up-mode"} `}>
+        {loginFormStatus ? <LoginForm /> : <SignUpForm />}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    loginFormStatus: state.loginUserReducer.loginFormStatus,
+  };
+};
+
+export default connect(mapStateToProps)(LoginPage);
